@@ -1,0 +1,30 @@
+{
+  "name": "package.json",
+  "version": "1.0.0",
+  "description": "Movie Rating",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bharti4/Project_05_api.git"
+  },
+  "author": "Sushmitha and Bharti",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bharti4/Project_05_api/issues"
+  },
+  "homepage": "https://github.com/bharti4/Project_05_api#readme",
+  "devDependencies": {
+    "cookie-parser": "^1.4.5",
+    "crypto": "^1.0.1",
+    "datalize": "^0.3.4",
+    "express": "^4.17.1",
+    "express-handlebars": "^4.0.4",
+    "handlebars-helpers": "^0.10.0",
+    "jsonwebtoken": "^8.5.1",
+    "mysql": "^2.18.1",
+    "node-fetch": "^2.6.0"
+  }
+}

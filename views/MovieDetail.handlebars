@@ -1,0 +1,122 @@
+<div>
+{{#if message}}
+    <div class="{{messageClass}}" >
+      {{#each message}}
+         {{this}}
+      {{/each}}
+    </div>
+{{/if}}
+</div>
+
+<div class="movieDetailcontainer">
+{{#if MovieDetailData}}
+<div class="grid-item item1">
+   <h2> {{MovieDetailData.title}}  </h2>
+</div> 
+
+<div class="grid-item item2"> <img src={{MovieDetailData.poster}} alt={{MovieDetailData.title}} ></div>
+<div class="grid-item item3">
+   <div><p><b>Year :</b>  {{MovieDetailData.year}} </p> </div>
+   <div><p><b>Synopsis : </b> {{MovieDetailData.synopsis}}  </p> </div>
+   <div> <p ><b>Overall Rating : </b> <span id="communityScore">{{ moviecommunityScore }} </span></p></div>
+   {{#unless logout}}
+      <div> <button  id="addRatingD" value={{MovieDetailData.movieId}} disabled title="Pl. login to add rating">Add Rating </button> </div>
+   {{/unless}}
+          
+   {{#if logout}}
+        <div> <button id="addRatingE" value={{MovieDetailData.movieId}} >Add Rating</button> </div>
+   {{/if}}
+
+   <form method="POST" id="addRatingForm" style="display:none">
+   <div>
+   <label for="Rating">Rating : </label>
+   <input type="range" id="rating" name="rating"  min="1" and max="5"   step="1" title="Min is  1 to Max is 5"> 
+      
+    <button type='submit' id="addrating" class="submit-button">Save</button>
+   </div>
+   </form>
+   <div class="messageBox" id="messageBox" style=" display:none;border-style: solid;border-color: #6f40ce;">
+      <img src="/images/movie.png" alt="Movie Icon" style="max-width: 100px; height : 30px;  padding:5px;"> 
+      <p id="alertmsg"> </p>
+      <button id="ok"> OK </button>
+   </div>
+   </div> {{!-- item3 div end  --}}
+{{/if}}
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
+<script>
+$(document).ready(function(){
+  // retrive community score    
+  movieId= $("#addRatingE").val()
+  if(movieId != undefined)  {
+   $.get("/moviescore/"+movieId, function(data, status){
+      $("#communityScore").text(data)
+     })
+  }
+
+  $("#addRatingE").click(function(){
+      $("form").show()
+  })
+
+  $("#addRatingForm").submit(function(e){
+    e.preventDefault()
+    movieId= $("#addRatingE").val();
+    rating = $("#rating").val();
+    url = "/moviescore";
+    
+    $.post(url,{movieId:movieId,rating:rating}).done(function(data)
+    {
+       $("#messageBox").show();
+       $("#alertmsg").text(data);
+       $(".messageBox").animate({
+            width: "300px",
+            height: "150px",
+            marginLeft: "150px",
+            borderWidth: "10px",
+            padding:"10px",
+            opacity: 0.5
+ 
+        });
+
+    }).fail(function (msg){
+       $("#messageBox").show();
+       $("#alertmsg").text("Fail to call server/connection problem");
+       $(".messageBox").animate({
+            width: "300px",
+            height: "150px",
+            marginLeft: "150px",
+            borderWidth: "10px",
+            padding:"10px",
+            opacity: 0.5
+ 
+        });
+
+    });
+    // retrive updated community score    
+    $.get("/moviescore/"+movieId, function(data, status){
+      $("#communityScore").text(data)
+    });
+  }) // end of click
+
+  $("#messageBox").click(function()
+  {
+    $("#messageBox").hide()
+    $("#addRatingForm").hide()
+    // retrive updated community score    
+    $.get("/moviescore/"+movieId, function(data, status){
+      $("#communityScore").text(data)
+    });
+  })
+
+
+  $(document).ajaxError(function(){
+  alert("An error occurred!")
+  });
+
+  })
+ </script>
+
+
+

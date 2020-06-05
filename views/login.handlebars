@@ -1,0 +1,32 @@
+<div class="mainContainer">
+<div>
+{{#if message}}
+    <div class="{{messageClass}}" >
+      {{#each message}}
+         {{this}}
+      {{/each}}
+    </div>
+{{/if}}
+</div>
+<div>
+   <h2> Employee Login  </h2>
+</div>
+ <div class="Reg-form">   
+    <div>
+    <form  action="/login" method="post"> 
+            <!-- onsubmit="return validate()" -->
+      <label for="email" >E-mail*</label>
+      <input type="email" id="email" name="email"  required autofocus>
+      <label for="password">Password *</label>
+      <input type="password" id="password" name="password"  required title="Password must be 6 to 20 characters string with at least one digit, one upper case letter, one lower case letter and one special symbol (“@#$%”)">
+     
+          <input type="submit"  id="submit"  class="submit-button" value="Login" >   
+     
+  </form>
+  </div>
+  {{!--<br><br>
+   <div>
+       <a class="" href="/register">New User </a> 
+  </div> --}}
+  </div>
+  </div>

@@ -1,0 +1,46 @@
+<div class="mainContainer">
+<div>
+       {{#if message}}
+       
+        {{#each message}}
+            <div class="alert" >
+                 {{this}}
+            </div>
+         {{/each}}
+        {{/if}}
+ </div>
+ <div>
+      <h2> New User Registration  </h2>
+  </div>
+  <div class="Reg-form">   
+        <form method="POST" action="/register">
+            <div >
+                <label for="surname">Sur Name</label>
+                <input name="surname" type="text" class="form-control" id="surname" >
+            </div>
+
+            <div >
+                <label for="firstname">First Name</label>
+                <input name="firstname" type="text" class="form-control" id="firstname" >
+            </div>
+
+            <div >
+                <label for="email">Email address</label>
+                <input name="email" type="email" class="form-control" id="email" >
+            </div>
+
+            <div>
+                <label for="password">Password</label>
+                <input name="password" type="password" class="form-control" id="password" title="Password must be 6 to 20 characters string with at least one digit, one upper case letter, one lower case letter and one special symbol (“@#$%”)" >
+            </div>
+
+            <div >
+                <label for="confirmpassword">Confirm Password</label>
+                <input name="confirmpassword" type="password" class="form-control" id="confirmpassword">
+            </div>
+
+            <button type="submit" class="submit-button">Register</button>
+        </form>
+    </div>
+
+</div>
