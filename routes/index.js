@@ -27,8 +27,9 @@ router.get('/moviescore/:movieId',(req , res) =>
    usermodels.communityScore(movieId,(err,result)=>{
     if(err)
     {
-      // res.send('Error in Retriving'); 
+      res.send(' '); 
       console.log("Error in Retriving")
+      return;
     }
     else if(result==0)
     {
@@ -38,7 +39,7 @@ router.get('/moviescore/:movieId',(req , res) =>
     {
       res.send(result.toString());
     }
-
+    
    })
 })
 
@@ -73,7 +74,7 @@ router.post('/moviescore',varifyToken,(req , res) =>
 router.get('/movieDetail/:movieId',async (req , res) =>
 {
     movieId= req.params.movieId;
-    console.log(movieId)
+    
     var movieDetailData={};
     try{
     const response = await fetch('https://yts.mx/api/v2/movie_details.jsonp?movie_id='+movieId);
@@ -86,7 +87,7 @@ router.get('/movieDetail/:movieId',async (req , res) =>
         "poster":json.data.movie.large_cover_image ,
         "title":json.data.movie.title_long ,
         "year":json.data.movie.year ,
-        "synopsis":json.data.movie.synopsis,
+        "Description":json.data.movie.description_full,
         "movieId":movieId
       }
     }

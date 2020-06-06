@@ -17,7 +17,7 @@
 <div class="grid-item item2"> <img src={{MovieDetailData.poster}} alt={{MovieDetailData.title}} ></div>
 <div class="grid-item item3">
    <div><p><b>Year :</b>  {{MovieDetailData.year}} </p> </div>
-   <div><p><b>Synopsis : </b> {{MovieDetailData.synopsis}}  </p> </div>
+   <div><p><b>Description : </b> {{MovieDetailData.Description}}  </p> </div>
    <div> <p ><b>Overall Rating : </b> <span id="communityScore">{{ moviecommunityScore }} </span></p></div>
    {{#unless logout}}
       <div> <button  id="addRatingD" value={{MovieDetailData.movieId}} disabled title="Pl. login to add rating">Add Rating </button> </div>

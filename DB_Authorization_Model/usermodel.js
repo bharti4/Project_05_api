@@ -3,16 +3,6 @@ var auth= require('./auth.js');
 const dbconfig=require("../DB_Authorization_Model/config.js");
 
 const db = mysql.createConnection(dbconfig.databseTableconnection);
-db.connect(async function (err) {
-  if (err) {
-    console.log("App could not connect to the DB. Stoppin");
-    throw "App could not connect to the DB. Stopping...";
-  }
-  else
-  {
-      console.log("Database connected");
-  }
-})
 
 usermodel =
 {
@@ -21,6 +11,14 @@ RegisterUser: function(req,callback){
     const { surname, firstname, email, password, confirmpassword } = req.body;
     if (password === confirmpassword)
      {
+        const db = mysql.createConnection(dbconfig.databseTableconnection);
+        db.connect(function (err) {
+        if (err) {
+              console.log("App could not connect to the DB. Stopping");
+              callback(error,'Database Error');
+              return;
+          }
+        })
       // Check if user with the same email is also registered
         db.query("select * from Users where email = ?",[email],(error,rows)=>{
         if(error)
@@ -55,7 +53,14 @@ RegisterUser: function(req,callback){
 addUser:(req,callback)=>{
     
     var post = { firstname: req.body.firstname, surname: req.body.surname , email: req.body.email,userpassword: req.body.password}
-    
+    const db = mysql.createConnection(dbconfig.databseTableconnection);
+    db.connect(function (err) {
+        if (err) {
+              console.log("App could not connect to the DB. Stopping");
+              callback(err);
+              return;
+          }
+        })
     var sql = "insert into users SET ?"
     db. query(sql,post,(err,result)=>{
         if(err)  callback(err); 
@@ -65,6 +70,15 @@ addUser:(req,callback)=>{
 },
 
 varifyuser: (req,callback)=>{
+    const db = mysql.createConnection(dbconfig.databseTableconnection);
+    db.connect(function (err) {
+        if (err) {
+              console.log("App could not connect to the DB. Stopping");
+              callback(err,"Database Error",null);
+              return;
+          }
+        })
+    
     sql="select userid from Users where email = ? and userpassword = ?"
     hashedPassword=auth.getHashedPassword(req.body.password)
 
@@ -84,16 +98,18 @@ varifyuser: (req,callback)=>{
 
 communityScore: function(movieId,cb)
 { 
+        
     con=mysql.createConnection(dbconfig.databseTableconnection);
     con.connect(function(err) 
     {
-    if (err)    cb(err,null) 
-      
+    if (err)    {
+      cb(err,null) 
+    }
       //var sql = "SELECT rating FROM userRating  movieId = ?";
       var sql = "select sum(rating)/count(*) as communityscore from MovieSchema.userRating where movieId = ?;"
       con.query(sql,[movieId], function (err, result) {
       if(err) /* database / system related error */
-            cb(err,null) ;
+            {cb(err,null) ; console.log(err)}
       else if(result[0].communityscore!=null)        /*rating found in database*/
       {    
            cb(null,result[0].communityscore)

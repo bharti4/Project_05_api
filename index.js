@@ -13,14 +13,14 @@ var comparison = helpers.comparison();
 const routesManager = require("./routes");
 
 
-db.connect(async function (err) {
+/*db.connect(async function (err) {
     if (err) {
       console.log("App could not connect to the DB. Stopping");
       throw "App could not connect to the DB. Stopping...";
 
     }
 });
-  
+  */
 const app = express();
      //setting veiw engine - handlebars
 app.engine('handlebars',exphbs({defaultLayout:'main'}));
@@ -49,5 +49,3 @@ app.use(function (err, req, res, next) {
     res.status(500).send("Schedule Internal Server Error");
 })
   
-
-app.g
