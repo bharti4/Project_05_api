@@ -3,7 +3,7 @@ module.exports =
 databseTableconnection : {
     host : 'localhost',
     user :'root',
-    password :'madnani',
+    password :'',
     database : 'MovieSchema'
 },
 
@@ -11,7 +11,7 @@ databseconnection :
 {
     host : 'localhost',
     user :'root',
-    password :'madnani',
+    password :'',
     
 }
 };
