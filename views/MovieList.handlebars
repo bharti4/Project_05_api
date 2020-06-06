@@ -40,7 +40,12 @@
 </div>
 
 <div id="movies"> </div>
-
+<div class="messageBox" id="messageBox" style=" display:none;border-style: solid;border-color: #6f40ce;">
+      <img src="/images/movie.png" alt="Movie Icon" style="max-width: 100px; height : 30px;  padding:5px;"> 
+      <p id="alertmsg"> </p>
+      <button id="ok"> OK </button>
+</div>
+   
 {{> footer }}
 
 {{!-- <img  src="/images/movie.png" alt="Movie Icon /> --}}
@@ -68,7 +73,7 @@ fetch('https://yts.mx/api/v2/list_movies.jsonp',{dataType: 'jsonp'})
     console.log(genreselval);
     
     if(genreselval==0)
-      alert("select genre")
+      displayAlert("Select Genre")
     else
     {
       // ajax call to yts site based on selected genre 
@@ -110,7 +115,7 @@ $("#titlelistform").submit(function(e){
     e.preventDefault()
     titleval=$("#selecttitle").val();
     if(titleval=="")
-      alert("selecttitle")
+      displayAlert("Pl. Enter Title")
     else
     {
       // ajax call to yts site
@@ -125,5 +130,33 @@ $("#titlelistform").submit(function(e){
     });
     }
 })
+$("#messageBox").click(function()
+  {
+    $("#messageBox").hide()
+    $("#addRatingForm").hide()
+    // retrive updated community score    
+    $.get("/moviescore/"+movieId, function(data, status){
+      $("#communityScore").text(data)
+    });
+  })
 
+$(document).ajaxError(function(){
+  
+  displayAlert("Fail to call yts.mx/api/ server / Pl.try with Mobile data Network!!");
+ /* alert("Ajax error occurred!  Pl.try with Mobile data Network / Check Database connection")*/
+  });
+  function displayAlert(alertmsg)
+  {
+    $("#messageBox").show()
+    $("#alertmsg").text(alertmsg);
+       $(".messageBox").animate({
+            width: "300px",
+            height: "150px",
+            marginLeft: "150px",
+            borderWidth: "10px",
+            padding:"10px",
+            opacity: 0.8
+    
+        });
+  }
 </script>
