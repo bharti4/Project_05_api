@@ -38,13 +38,13 @@
 <button type="submit" id="getMoviesGenres"><i class="fa fa-search"></i>Search</button>
 </form>
 </div>
-
-<div id="movies"> </div>
 <div class="messageBox" id="messageBox" style=" display:none;border-style: solid;border-color: #6f40ce;">
       <img src="/images/movie.png" alt="Movie Icon" style="max-width: 100px; height : 30px;  padding:5px;"> 
       <p id="alertmsg"> </p>
       <button id="ok"> OK </button>
 </div>
+<div id="movies"> </div>
+
    
 {{> footer }}
 
@@ -53,7 +53,7 @@
 <script>
 
 window.addEventListener('load', async (event) => {
-  console.log('page is fully loaded');
+  //console.log('page is fully loaded');
 
 fetch('https://yts.mx/api/v2/list_movies.jsonp',{dataType: 'jsonp'})
 .then(response => response.json())
@@ -63,16 +63,13 @@ fetch('https://yts.mx/api/v2/list_movies.jsonp',{dataType: 'jsonp'})
       htmloutputrender(data);
     }
 })
-.catch(error => console.error(error))
-})
+.catch(error => {displayAlert("Fail to call yts.mx server / Pl. use mobile network");   })
 
-
-  $("#Genrelistform").submit(function(e){
+$("#Genrelistform").submit(function(e){
     e.preventDefault()
+    $("#messageBox").hide()
     genreselval=$( "#selectGenre option:selected" ).val();
-    console.log(genreselval);
-    
-    if(genreselval==0)
+   if(genreselval==0)
       displayAlert("Select Genre")
     else
     {
@@ -80,14 +77,13 @@ fetch('https://yts.mx/api/v2/list_movies.jsonp',{dataType: 'jsonp'})
       ytsurl = "https://yts.mx/api/v2/list_movies.jsonp?genre="+genreselval;
      
       $.get(ytsurl, function(data, status){
-        console.log(data.status)
-        if(data.status=="ok")
+           if(data.status=="ok")
             {
                  htmloutputrender(data);
             }
       });
     }
-  }) // end of click
+  }) 
   async function htmloutputrender(data)
   {
     listOfMovies = data.data.movies;
@@ -96,13 +92,13 @@ fetch('https://yts.mx/api/v2/list_movies.jsonp',{dataType: 'jsonp'})
     { 
       movieId=listOfMovies[movieIndex].id;
       comunityScroe = ' '; 
-       await $.get("http://localhost:3000/moviescore/"+movieId, function(data, status){
+       await $.get("/moviescore/"+movieId, function(data, status){
               comunityScroe=data;
        });
       
       outputHtml += 
      '<div class = "movieListitem">' +
-         "<a href=http://localhost:3000/MovieDetail/"+listOfMovies[movieIndex].id+"><img src="+listOfMovies[movieIndex].medium_cover_image+"> </a>" +
+         "<a href=/MovieDetail/"+listOfMovies[movieIndex].id+"><img src="+listOfMovies[movieIndex].medium_cover_image+"> </a>" +
          "<p>Title :"+listOfMovies[movieIndex].title+"</p>" +
          "<p>Genres :"+listOfMovies[movieIndex].genres+"</p>"+
          "<p>Community Score :"+comunityScroe+"</p>"+
@@ -112,7 +108,8 @@ fetch('https://yts.mx/api/v2/list_movies.jsonp',{dataType: 'jsonp'})
   }
 
 $("#titlelistform").submit(function(e){
-    e.preventDefault()
+    e.preventDefault();
+    $("#messageBox").hide();
     titleval=$("#selecttitle").val();
     if(titleval=="")
       displayAlert("Pl. Enter Title")
@@ -122,8 +119,7 @@ $("#titlelistform").submit(function(e){
      ytsurl = "https://yts.mx/api/v2/list_movies.jsonp?query_term=" +titleval;
       
       $.get(ytsurl, function(data, status){
-        console.log(data.status)
-        if(data.status=="ok")
+          if(data.status=="ok")
             {
                       htmloutputrender(data);
             }
@@ -133,17 +129,13 @@ $("#titlelistform").submit(function(e){
 $("#messageBox").click(function()
   {
     $("#messageBox").hide()
-    $("#addRatingForm").hide()
-    // retrive updated community score    
-    $.get("/moviescore/"+movieId, function(data, status){
-      $("#communityScore").text(data)
-    });
-  })
+   
+ })
 
 $(document).ajaxError(function(){
   
   displayAlert("Fail to call yts.mx/api/ server / Pl.try with Mobile data Network!!");
- /* alert("Ajax error occurred!  Pl.try with Mobile data Network / Check Database connection")*/
+ 
   });
   function displayAlert(alertmsg)
   {
@@ -159,4 +151,5 @@ $(document).ajaxError(function(){
     
         });
   }
+})
 </script>
